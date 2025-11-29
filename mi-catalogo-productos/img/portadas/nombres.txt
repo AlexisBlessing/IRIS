@@ -1,3 +1,2 @@
-# Contenido del archivo img/portadas/nombres.txt
 Alien_VS_Depredador
 Mario_Kart
