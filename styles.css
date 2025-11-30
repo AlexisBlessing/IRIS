@@ -1,0 +1,253 @@
+
+:root {
+    --bg-color: white;
+    --text-color: black;
+    --text-color-logo: white;
+    --header-bg: rgba(0,0,0,0.9);
+    --card-bg: white;
+    --modo-oscuro-btn-bg: rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding-top: 50px;
+}
+
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #f5f5f5;
+    --header-bg: #1f1f1f;
+    --card-bg: #1e1e1e;
+    --modo-oscuro-btn-bg: #373737;
+ }
+
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    text-align: center;
+    line-height: 10px;
+    color: var(--text-color-logo);
+    cursor: pointer; /* puntero al pasar mouse */
+    animation: latido 5s infinite;
+}
+
+h1:hover {
+    color: rgb(241, 185, 2); /* más oscuro al pasar mouse */
+}
+
+@keyframes latido {
+    0% {
+        transform: scale( 1 );
+    }
+
+    50% {
+        transform: scale( 1.2 );
+    }
+
+    100% {
+        transform: scale( 1 );
+    }
+}
+
+
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+}
+
+
+
+.header {
+
+    position: fixed; /* Fija la barra arriba */
+    top: 0;
+    left: 0;
+    width: 100%; /* ocupa todo el ancho */
+    grid-area: header;
+    height: 50px;
+    background-color: var(--header-bg);
+    /*padding: 0px;*/
+    /*border: 5px solid yellow;*/
+    z-index: 1000;
+    /*Efecto LED PS5 */
+}
+
+.header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px; /* grosor del LED */
+
+    background: linear-gradient( 90deg, rgba(200,140,0,0) 0%, rgba(241,185,2,1) 35%, rgba(255,210,80,1) 50%, rgba(241,185,2,1) 65%, rgba(200,140,0,0) 100% );
+    background-size: 200% 100%;
+    animation: ledMove 3s linear infinite;
+}
+
+
+@keyframes ledMove {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+
+.producto-card {
+
+    display: flex;
+    flex-direction: column; /* Apila imagen, título y precio verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    width: 100%;
+    text-align: center;
+    transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
+    /*background-color: none;*/
+
+}
+
+/* Animación: Cuando el usuario pasa el mouse por encima */
+.producto-card:hover {
+    transform: scale(1.05); /* Hace que la tarjeta crezca un 5% */
+    box-shadow: 0 4px 8px rgba(0,0,0,0);
+    cursor: pointer; /* puntero al pasar mouse */
+}
+
+.producto-card:last-child {
+    margin-bottom: 50px; /* o el padding que quieras */
+}
+
+.producto-card img {
+    width: 80%; /* se ajusta al ancho de la tarjeta */
+    height: auto; /* mantiene proporción */
+    object-fit: cover; /* opcional: recorta si es necesario */
+    /*border: 1px solid black;*/
+    display: block;
+    margin: 0 auto; /* centra la imagen */
+
+ }
+
+ .producto-card h3 {
+    margin: 0px;
+    padding: 0px;
+    /*border: 1px solid black;*/
+ }
+
+.producto-card p{
+    margin: 5px;
+    padding-bottom: 10px;
+}
+
+#modo-oscuro-btn {
+    position: absolute;
+    right: 20px; /* distancia desde el borde derecho */
+    top: 50%; /* centra verticalmente */
+    transform: translateY(-50%); /* ajuste exacto de centrado vertical */
+    transform-origin: center; /* el zoom se hace desde el centro */
+    width: 40px; /* ancho del círculo */
+    height: 40px; /* alto del círculo */
+    border-radius: 40%; /* lo hace circular */
+    border: none; /* quitar borde por defecto */
+    background-color: var(--modo-oscuro-btn-bg); /* negro con 50% transparencia */
+    color: white; /* color del icono */
+    font-size: 18px; /* tamaño del icono */
+    cursor: pointer; /* puntero al pasar mouse */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Hover: un ligero efecto para que se vea activo */
+#modo-oscuro-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* más oscuro al pasar mouse */
+    transform: translateY(-50%) scale(1.1); /* pequeño zoom */
+}
+
+
+footer {
+    height: 40px;
+    font-size: 0.7rem;
+    color: white;
+    background-color: var(--header-bg);
+    text-align: center;
+    position: fixed; /* Fija la barra arriba */
+    bottom: 0;
+    left: 0;
+    width: 100%; /* ocupa todo el ancho */
+}
+
+
+
+/* === Desktop grande en adelante === */
+@media ( min-width: 1200px ) {
+
+    body {
+        padding-top: 150px;
+    }
+
+    h1 {
+        font-size: 100px;
+    }
+
+    .header {
+        height: 150px;
+        background-color: var(--header-bg);
+        /*border: 5px solid yellow;*/
+    }
+
+    .producto-card {
+        /*border: 1px solid black;*/
+        max-width: none;
+        /*margin: 0;*/ /* centra la tarjeta si sobra espacio */
+    }
+
+    .catalogo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 50px;
+        padding: 50px;
+    }
+
+    .producto-card img {
+        width: 100%; /* se ajusta al ancho de la tarjeta */
+        height: auto; /* mantiene proporción */
+        object-fit: cover; /* opcional: recorta si es necesario */
+    }
+
+    h2 {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 3rem;
+    }
+
+    .header::after {
+        height: 8px; /* grosor del LED */
+    }
+
+    footer {
+        height: 50px;
+        font-size: 1rem;
+    }
+
+    #modo-oscuro-btn {
+
+        width: 80px; /* ancho del círculo */
+        height: 80px; /* alto del círculo */
+        border-radius: 40%; /* lo hace circular */
+        font-size: 25px; /* tamaño del icono */
+    }
+}
+
+
+
+
+
+
