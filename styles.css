@@ -5,6 +5,13 @@
     outline: none;
 }
 
+img {
+    -webkit-touch-callout: none; /* Evita callout en iOS/Android */
+    -webkit-user-drag: none; /* Evita arrastrar imágenes */
+    user-select: none; /* Evita selección */
+    pointer-events: auto; /* Mantiene clics funcionales */
+}
+
 :root {
     --bg-color: white;
     --text-color: black;
@@ -46,6 +53,7 @@ h1 {
     /*border: 1px solid white;*/
     display: inline-block;
     padding: 2px 5px;
+    user-select: none; /* Evita selección */
 }
 
 h1:hover {
@@ -206,6 +214,7 @@ h2 {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s, transform 0.2s;
+    user-select: none; /* Evita selección */
 }
 
 /* Hover: un ligero efecto para que se vea activo */
@@ -252,6 +261,7 @@ footer {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 2000;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+
 }
 
 .btn-wsp img {

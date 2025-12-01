@@ -249,5 +249,18 @@ logo.addEventListener("click", () => {
     }
 });
 
+// --- Evitar menú contextual en imágenes ---
+document.addEventListener("contextmenu", (e) => {
+    if (e.target.tagName === "IMG") {
+        e.preventDefault();
+    }
+});
+
+// --- Evitar que cualquier imagen se pueda arrastrar ---
+document.addEventListener("dragstart", (e) => {
+    if (e.target.tagName === "IMG") {
+        e.preventDefault();
+    }
+});
 
 
