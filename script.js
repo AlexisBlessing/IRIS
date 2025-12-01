@@ -1,44 +1,117 @@
-<<<<<<< HEAD
-﻿// --- CONFIGURACIÓN CON ARCHIVO DE TEXTO ---
-const folderPath = 'img/portadas';
-const nombresTxtPath = `${folderPath}/nombres.txt`; // Ruta al archivo de texto
+
+
+// --- CONFIGURACIÓN CON ARCHIVO DE TEXTO ---
+const folderPortadasPath = 'img/portadas';
+const folderHoja1Path = 'img/hoja_1';
+const folderHoja2Path = 'img/hoja_2';
+const folderContraPortadasPath = 'img/contra_portadas';
+const nombresTxtPath = `${folderPortadasPath}/nombres.txt`;
+
+const tiempoInactividad = 6000;                             // 6 segundos de inactividad
+const tiempoRetornoAutomatico = 1000;                       // 1 segundo para volver a portada
+
 const precioFijo = '$15.000';
 
+
+// ------------------------------------------
+
+
+// Contenedor principal del catálogo
 const contenedorGrid = document.getElementById('catalogo-grid');
 
+// Función para cargar la imagen real desde un data-src
+const cargarImagenReal = (imgElement, srcPath) => {
+
+    // Si la fuente ya es la que buscamos o ya se ha cargado, no hacemos nada
+    if (imgElement.src.includes(srcPath) || imgElement.dataset.loaded === srcPath) {
+        return;
+    }
+    imgElement.src = srcPath;
+    // imgElement.dataset.loaded = srcPath; // Opcional: marca como cargada
+};
+
+
+// Función principal para cargar el catálogo desde nombres.txt
 async function cargarCatalogoDesdeTexto() {
+    // ... (fetch() del nombres.txt) ...
     try {
-        // 1. Descargamos el archivo de texto
         const response = await fetch(`${nombresTxtPath}?ts=${new Date().getTime()}`);
-
         if (!response.ok) {
-            throw new Error('No se pudo cargar el archivo nombres.txt. Revisa la ruta y el nombre.');
+            throw new Error('No se pudo cargar el archivo nombres.txt.');
         }
-
-        // 2. Leemos el contenido como texto plano
         const textContent = await response.text();
-
-        // 3. Separamos el texto en líneas (un nombre por línea)
-        // Usamos .filter(Boolean) para ignorar líneas vacías
         const nombresDeProductos = textContent.split('\n').filter(Boolean);
 
-        // 4. Procesamos cada nombre
         nombresDeProductos.forEach((nombreLimpio, index) => {
-            // El índice + 1 es el número de la imagen (0+1=1, 1+1=2, etc.)
             const numeroImagen = index + 1;
-            const nombreArchivo = `${numeroImagen}.png`; // Asumimos todas son PNG
+            const nombreArchivo = `${numeroImagen}.webp`;
 
-            // --- Creación de elementos HTML ---
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('producto-card');
 
+            // --- IMAGEN (Portadas) ---
             const imagen = document.createElement('img');
-            imagen.src = `${folderPath}/${nombreArchivo}`;
+            imagen.src = 'img/portadas/placeholder.webp';                           // placeholder
+            imagen.dataset.srcPortadas = `${folderPortadasPath}/${nombreArchivo}`;  // URL real portada
             imagen.alt = nombreLimpio;
+            imagen.loading = 'lazy';
 
+            // Lazy loading inicial para la portada usando IntersectionObserver
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        cargarImagenReal(entry.target, entry.target.dataset.srcPortadas);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            });
+            observer.observe(imagen);
+
+            // --- Data-src para otras vistas (no se descargan todavía) ---
+            imagen.dataset.srcHoja1 = `${folderHoja1Path}/${nombreArchivo}`;
+            imagen.dataset.srcHoja2 = `${folderHoja2Path}/${nombreArchivo}`;
+            imagen.dataset.srcContra = `${folderContraPortadasPath}/${nombreArchivo}`;
+
+
+            // --- Temporizador de inactividad para regresar a la portada ---
+            let temporizadorInactividad = null;
+
+            const iniciarTemporizadorInactividad = () => {
+                if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
+                // Si la imagen no está en la portada, la regresamos automáticamente
+                temporizadorInactividad = setTimeout(() => {
+                    if (!imagen.src.includes(folderPortadasPath)) {
+                        setTimeout(() => {
+                            cargarImagenReal(imagen, imagen.dataset.srcPortadas);
+                            temporizadorInactividad = null;
+                        }, tiempoRetornoAutomatico);
+                    }
+                }, tiempoInactividad);
+            };
+
+            // --- Lógica de clic para cambiar vistas de la imagen ---
+            imagen.addEventListener('click', () => {
+
+                let nuevaSrc;
+
+                if (imagen.src.includes(folderPortadasPath)) {
+                    nuevaSrc = imagen.dataset.srcHoja1;
+                } else if (imagen.src.includes(folderHoja1Path)) {
+                    nuevaSrc = imagen.dataset.srcHoja2;
+                } else if (imagen.src.includes(folderHoja2Path)) {
+                    nuevaSrc = imagen.dataset.srcContra;
+                } else if (imagen.src.includes(folderContraPortadasPath)) {
+                    nuevaSrc = imagen.dataset.srcPortadas;
+                }
+                if (imagen.src !== nuevaSrc) {
+                    cargarImagenReal(imagen, nuevaSrc);
+                    iniciarTemporizadorInactividad();
+                }
+            });
+
+            // --- Título y precio del producto ---
             const titulo = document.createElement('h3');
             titulo.textContent = nombreLimpio;
-
             const precio = document.createElement('p');
             precio.textContent = `Valor ${precioFijo}`;
 
@@ -46,98 +119,86 @@ async function cargarCatalogoDesdeTexto() {
             tarjeta.appendChild(titulo);
             tarjeta.appendChild(precio);
             contenedorGrid.appendChild(tarjeta);
+
         });
 
     } catch (error) {
         console.error("Error al cargar el catálogo:", error);
         contenedorGrid.innerHTML = `<p>Error al cargar los productos: ${error.message}</p>`;
+        contenedorGrid.classList.add('is-loaded'); 
     }
 }
 
-// Ejecuta la función cuando la página carga
 cargarCatalogoDesdeTexto();
 
+// --- Modo oscuro ---
 const botonModoOscuro = document.getElementById('modo-oscuro-btn');
-
 botonModoOscuro.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode'); // Alterna la clase dark-mode
-
-    // Cambiar icono del botón
-    if (document.body.classList.contains('dark-mode')) {
-        botonModoOscuro.textContent = "☀️"; // Modo claro
-    } else {
-        botonModoOscuro.textContent = "🌙"; // Modo oscuro
-    }
+    document.body.classList.toggle('dark-mode');
+    botonModoOscuro.textContent = document.body.classList.contains('dark-mode') ? "☀️" : "🌙";
 });
-=======
-﻿// --- CONFIGURACIÓN CON ARCHIVO DE TEXTO ---
-const folderPath = 'img/portadas';
-const nombresTxtPath = `${folderPath}/nombres.txt`; // Ruta al archivo de texto
-const precioFijo = '$15.000';
 
-const contenedorGrid = document.getElementById('catalogo-grid');
 
-async function cargarCatalogoDesdeTexto() {
-    try {
-        // 1. Descargamos el archivo de texto
-        const response = await fetch(`${nombresTxtPath}?ts=${new Date().getTime()}`);
+// --- Reducción del header durante scroll ---
 
-        if (!response.ok) {
-            throw new Error('No se pudo cargar el archivo nombres.txt. Revisa la ruta y el nombre.');
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', () => {
+
+        if (window.scrollY > 50) {                      // si se ha scrolleado más de 50px
+            header.classList.add('header-small');
+        } else {
+            header.classList.remove('header-small');
         }
+});
 
-        // 2. Leemos el contenido como texto plano
-        const textContent = await response.text();
+// --- Scroll suave para desktop ---
 
-        // 3. Separamos el texto en líneas (un nombre por línea)
-        // Usamos .filter(Boolean) para ignorar líneas vacías
-        const nombresDeProductos = textContent.split('\n').filter(Boolean);
+if (window.innerWidth >= 1200) {
+    let targetScroll = window.scrollY;
 
-        // 4. Procesamos cada nombre
-        nombresDeProductos.forEach((nombreLimpio, index) => {
-            // El índice + 1 es el número de la imagen (0+1=1, 1+1=2, etc.)
-            const numeroImagen = index + 1;
-            const nombreArchivo = `${numeroImagen}.png`; // Asumimos todas son PNG
+    window.addEventListener('wheel', (e) => {
+        e.preventDefault();
 
-            // --- Creación de elementos HTML ---
-            const tarjeta = document.createElement('div');
-            tarjeta.classList.add('producto-card');
+        targetScroll += e.deltaY * 0.6;           // velocidad del scroll
 
-            const imagen = document.createElement('img');
-            imagen.src = `${folderPath}/${nombreArchivo}`;
-            imagen.alt = nombreLimpio;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
-            const titulo = document.createElement('h3');
-            titulo.textContent = nombreLimpio;
+        targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+    }, { passive: false });
 
-            const precio = document.createElement('p');
-            precio.textContent = `Valor ${precioFijo}`;
+    function smoothScroll() {
+        const currentScroll = window.scrollY;
+        const diff = targetScroll - currentScroll;
 
-            tarjeta.appendChild(imagen);
-            tarjeta.appendChild(titulo);
-            tarjeta.appendChild(precio);
-            contenedorGrid.appendChild(tarjeta);
-        });
+        window.scrollBy(0, diff * 0.2);
 
-    } catch (error) {
-        console.error("Error al cargar el catálogo:", error);
-        contenedorGrid.innerHTML = `<p>Error al cargar los productos: ${error.message}</p>`;
+        requestAnimationFrame(smoothScroll);
     }
+
+    smoothScroll();
 }
 
-// Ejecuta la función cuando la página carga
-cargarCatalogoDesdeTexto();
+// --- Música interactiva con el logo ---
 
-const botonModoOscuro = document.getElementById('modo-oscuro-btn');
+const musica = document.getElementById("musica");
+const logo = document.querySelector("h1");
 
-botonModoOscuro.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode'); // Alterna la clase dark-mode
+let musicaEncendida = false;
 
-    // Cambiar icono del botón
-    if (document.body.classList.contains('dark-mode')) {
-        botonModoOscuro.textContent = "☀️"; // Modo claro
+logo.addEventListener("click", () => {
+    if (!musicaEncendida) {
+        musica.volume = 0.5;
+        musica.play();
+        musicaEncendida = true;
+        logo.style.animationDuration = "4s"; // acelera la animación
     } else {
-        botonModoOscuro.textContent = "🌙"; // Modo oscuro
+        musica.pause();
+        musica.currentTime = 0;
+        musicaEncendida = false;
+        logo.style.animationDuration = "5s"; // vuelve a la velocidad normal
     }
 });
->>>>>>> a1ff351fd72c29250e018c1e787a6300d5aa186f
+
+
+
