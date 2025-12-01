@@ -36,9 +36,11 @@ async function cargarCatalogoDesdeTexto() {
     // ... (fetch() del nombres.txt) ...
     try {
         const response = await fetch(`${nombresTxtPath}?ts=${new Date().getTime()}`);
+
         if (!response.ok) {
             throw new Error('No se pudo cargar el archivo nombres.txt.');
         }
+
         const textContent = await response.text();
         const nombresDeProductos = textContent.split('\n').filter(Boolean);
 
@@ -78,11 +80,24 @@ async function cargarCatalogoDesdeTexto() {
 
             const iniciarTemporizadorInactividad = () => {
                 if (temporizadorInactividad) clearTimeout(temporizadorInactividad);
-                // Si la imagen no está en la portada, la regresamos automáticamente
+
                 temporizadorInactividad = setTimeout(() => {
                     if (!imagen.src.includes(folderPortadasPath)) {
                         setTimeout(() => {
-                            cargarImagenReal(imagen, imagen.dataset.srcPortadas);
+                            // --- EFECTO PARA CAMBIO AUTOMÁTICO ---
+                            imagen.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+                            imagen.style.transform = 'rotateY(90deg)';
+                            imagen.style.opacity = 0.8;
+
+                            setTimeout(() => {
+                                // Cambiamos la imagen a la portada
+                                cargarImagenReal(imagen, imagen.dataset.srcPortadas);
+
+                                // Volvemos al estado normal con efecto
+                                imagen.style.transform = 'rotateY(0deg)';
+                                imagen.style.opacity = 1;
+                            }, 300); // coincide con la duración de la transición
+
                             temporizadorInactividad = null;
                         }, tiempoRetornoAutomatico);
                     }
@@ -103,22 +118,56 @@ async function cargarCatalogoDesdeTexto() {
                 } else if (imagen.src.includes(folderContraPortadasPath)) {
                     nuevaSrc = imagen.dataset.srcPortadas;
                 }
+
                 if (imagen.src !== nuevaSrc) {
-                    cargarImagenReal(imagen, nuevaSrc);
+                    // --- EFECTO DE TRANSICIÓN ---
+                    imagen.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                    imagen.style.transform = 'scale(0.85)';
+                    imagen.style.opacity = 0.8;
+
+                    setTimeout(() => {
+
+                        cargarImagenReal(imagen, nuevaSrc);
+                        imagen.style.transform = 'scale(1.1)';
+                        imagen.style.opacity = 1;
+
+                        setTimeout(() => {
+                            imagen.style.transform = 'scale(1)';
+                        }, 200);
+                        
+                    }, 200); // coincide con la duración de la transición
+
                     iniciarTemporizadorInactividad();
                 }
+
+
             });
 
             // --- Título y precio del producto ---
             const titulo = document.createElement('h3');
             titulo.textContent = nombreLimpio;
+
+            // Ocultamos el título inicialmente con un estilo inline simple
+            titulo.style.opacity = 0; 
+
             const precio = document.createElement('p');
             precio.textContent = `Valor ${precioFijo}`;
+
+            // Ocultamos el precio inicialmente
+            precio.style.opacity = 0;
 
             tarjeta.appendChild(imagen);
             tarjeta.appendChild(titulo);
             tarjeta.appendChild(precio);
             contenedorGrid.appendChild(tarjeta);
+
+            setTimeout(() => {
+                titulo.style.opacity = 1; // Hacemos visible el título después de 200ms
+            }, 100);
+
+            setTimeout(() => {
+                precio.style.opacity = 1; // Hacemos visible el precio después de 400ms
+            }, 100);
 
         });
 
