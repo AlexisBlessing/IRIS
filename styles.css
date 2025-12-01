@@ -139,7 +139,7 @@ h2 {
 
 .catalogo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
     padding: 20px;
     /*border: 1px solid black;*/
