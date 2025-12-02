@@ -203,8 +203,9 @@ window.addEventListener('scroll', () => {
 
 // --- Scroll suave para desktop ---
 
+let targetScroll = window.scrollY;
+
 if (window.innerWidth >= 1200) {
-    let targetScroll = window.scrollY;
 
     window.addEventListener('wheel', (e) => {
         e.preventDefault();
@@ -261,6 +262,46 @@ document.addEventListener("dragstart", (e) => {
     if (e.target.tagName === "IMG") {
         e.preventDefault();
     }
+});
+
+// --- Botón flotante "Subir" ---
+const btnSubir = document.getElementById("btnSubir");
+
+let var_px_scroll = 100;
+
+if (window.innerWidth >= 1200) {
+
+    var_px_scroll = 300;
+
+} else {
+    
+    var_px_scroll = 150;
+}
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > var_px_scroll) {
+        btnSubir.classList.add("mostrar");
+        btnSubir.classList.remove("ocultar");
+    } else {
+        btnSubir.classList.remove("mostrar");
+        btnSubir.classList.add("ocultar");
+    }
+});
+
+btnSubir.addEventListener("click", () => {
+
+    if (window.innerWidth >= 1200) {
+        // Escritorio → usa scroll suave personalizado
+        targetScroll = 0;
+
+    } else {
+        // Móvil → usa scroll nativo
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    }
+
 });
 
 

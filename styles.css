@@ -29,7 +29,7 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     padding-top: 80px;
-    padding-bottom: 40px;
+    padding-bottom: 65px;
 }
 
 body.dark-mode {
@@ -76,15 +76,16 @@ h1:hover {
 
 
 h2 {
+
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.5rem;
     text-align: center;
     color: white;
     background-color: #121212;
-    width: 100%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin: 0px;
+    padding: 5px 20px;
+    border-radius: 25px;
+    /*border: 5px solid yellow;*/
+    margin: 0px 15px;
 }
 
 
@@ -223,6 +224,13 @@ h2 {
     transform: translateY(-50%) scale(1.1); /* pequeño zoom */
 }
 
+.header.header-small #modo-oscuro-btn {
+    width: 30px; /* ancho del círculo */
+    height: 30px; /* alto del círculo */
+    border-radius: 40%; /* lo hace circular */
+    font-size: 18px; /* tamaño del icono */
+}
+
 .subti {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.6rem;
@@ -302,6 +310,45 @@ footer {
     box-shadow: 0 6px 14px rgba(0,0,0,0.4);
 }
 
+.btn-subir {
+    position: fixed;
+    bottom: 50px; /* arriba del footer */
+    left: 50%; /* centrar horizontalmente */
+    transform: translateX(-50%);
+    width: 45px;
+    height: 25px;
+    border-radius: 40%;
+    background: var(--secondary-color, #f1b902);
+    border: none;
+    color: rgba(0,0,0,0.8);
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    display: none; /* oculto por defecto */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    pointer-events: none; /* se activa solo cuando se muestra */
+}
+
+.btn-subir.mostrar {
+    display: flex;
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+}
+
+.btn-subir.ocultar {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+}
+
+.btn-subir:hover{
+    transform: translateX(-50%) scale(1.2); /* aumenta tamaño*/
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
 
 /* === Desktop grande en adelante === */
 @media ( min-width: 1200px ) {
@@ -369,6 +416,8 @@ footer {
     h2 {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 3rem;
+        margin: 0px 80px 0px 80px;
+        border-radius: 50px;
     }
 
     .header::after {
@@ -391,9 +440,15 @@ footer {
 
         width: 80px; /* ancho del círculo */
         height: 80px; /* alto del círculo */
-        border-radius: 40%; /* lo hace circular */
+        font-size: 35px; /* tamaño del icono */
+    }
+
+    .header.header-small #modo-oscuro-btn {
+        width: 50px; /* ancho del círculo */
+        height: 50px; /* alto del círculo */
         font-size: 25px; /* tamaño del icono */
     }
+
     .btn-wsp {
         width: 50px;
         height: 50px;
@@ -419,6 +474,14 @@ footer {
     .btn-ml img {
         width: 35px;
         height: 60px;
+    }
+
+    .btn-subir {
+        bottom: 60px; /* arriba del footer */
+        width: 65px;
+        height: 40px;
+        font-size: 20px;
+     
     }
 
 
