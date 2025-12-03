@@ -328,3 +328,24 @@ document.addEventListener("dragstart", (e) => {
     }
 });
 
+// --- Mostrar version segun fecha y hora de subida
+
+const badge = document.getElementById("versionBadge");
+
+if (isDesktop) {
+    setTimeout(() => {
+        badge.style.opacity = 0;
+        setTimeout(() => badge.remove(), 3000);
+    }, 8000);
+}
+
+else {
+    setTimeout(() => {
+        badge.style.opacity = 0;
+        setTimeout(() => badge.remove(), 1500);
+    }, 3000);
+}
+
+
+
+

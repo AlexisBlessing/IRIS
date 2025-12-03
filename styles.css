@@ -351,6 +351,17 @@ footer {
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
+#versionBadge {
+    position: fixed;
+    bottom: 5px; /* centrar horizontalmente */
+    color: white;
+    font-size: 6px;
+    z-index: 99999;
+    opacity: 1;
+    transition: opacity 1s ease;
+    left: 50%;                      /* centrar horizontalmente */
+    transform: translateX(-50%);
+}
 
 /* === Desktop grande en adelante === */
 @media ( min-width: 1200px ) {
@@ -484,6 +495,15 @@ footer {
         height: 40px;
         font-size: 20px;
      
+    }
+
+    #versionBadge {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 12px;
+        left: auto;
+        transform: none;
     }
 
 
