@@ -292,25 +292,24 @@ const logo = document.querySelector("h1");
 
 let musicaEncendida = false;
 
-logo.addEventListener("click", () => {
+logo.addEventListener("click", async () => {
     if (!musicaEncendida) {
 
-        // prender música
-        musica.volume = 0.5;
-        musica.play();
-        musicaEncendida = true;
+        try {
+            await musica.play(); // reproducir primero
+            musica.volume = 0.5; // ajustar después de que play() se ejecuta
+        } catch (error) {
+            console.error("El navegador impidió reproducir el audio:", error);
+        }
 
-        // activar animación latido
+        musicaEncendida = true;
         logo.classList.add("latido-activo");
 
     } else {
 
-        // apagar música
         musica.pause();
         musica.currentTime = 0;
         musicaEncendida = false;
-
-        // desactivar animación latido
         logo.classList.remove("latido-activo");
     }
 });
