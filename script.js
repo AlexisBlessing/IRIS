@@ -297,7 +297,7 @@ logo.addEventListener("click", async () => {
 
         try {
             await musica.play(); // reproducir primero
-            musica.volume = 0.5; // ajustar después de que play() se ejecuta
+            musica.volume = 0.3; // ajustar después de que play() se ejecuta
         } catch (error) {
             console.error("El navegador impidió reproducir el audio:", error);
         }
