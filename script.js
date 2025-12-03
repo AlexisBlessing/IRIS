@@ -294,15 +294,24 @@ let musicaEncendida = false;
 
 logo.addEventListener("click", () => {
     if (!musicaEncendida) {
+
+        // prender música
         musica.volume = 0.5;
         musica.play();
         musicaEncendida = true;
-        logo.style.animationDuration = "4s"; // acelera la animación
+
+        // activar animación latido
+        logo.classList.add("latido-activo");
+
     } else {
+
+        // apagar música
         musica.pause();
         musica.currentTime = 0;
         musicaEncendida = false;
-        logo.style.animationDuration = "5s"; // vuelve a la velocidad normal
+
+        // desactivar animación latido
+        logo.classList.remove("latido-activo");
     }
 });
 
