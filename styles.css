@@ -169,7 +169,6 @@ h2 {
 .producto-card:hover {
     transform: scale(1.05);                     /* Hace que la tarjeta crezca un 5% */
     box-shadow: 0 4px 8px rgba(0,0,0,0);
-    cursor: pointer;                            /* puntero al pasar mouse */
 }
 
 
@@ -181,6 +180,18 @@ h2 {
     margin: 0 auto;         /* centra la imagen */
     /*border: 1px solid black;*/
 }
+
+.producto-card img:hover {
+    cursor: pointer;                            /* puntero al pasar mouse */
+    /*animation: pulseCursor 0.4s ease;*/
+}
+/*
+@keyframes pulseCursor {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+*/
 
 .producto-card img[src*="placeholder.webp"] {
     aspect-ratio: 2 / 3;                        /* la proporción de las portadas reales */
