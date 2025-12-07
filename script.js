@@ -189,7 +189,9 @@ async function cargarCatalogoDesdeTexto() {
 cargarCatalogoDesdeTexto();
 
 // --- Modo oscuro ---
+
 const botonModoOscuro = document.getElementById('modo-oscuro-btn');
+
 botonModoOscuro.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
     botonModoOscuro.textContent = document.body.classList.contains('dark-mode') ? "☀️" : "🌙";
