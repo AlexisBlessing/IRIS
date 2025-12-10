@@ -185,7 +185,7 @@ h2 {
     animation: pulse-ripple 1.25s infinite ease-out;
 }
 
-/* Definición de la animación en bucle */
+/* Definición de la animación en bucle ripple*/
 @keyframes pulse-ripple {
     0% {
         transform: scale(0);
