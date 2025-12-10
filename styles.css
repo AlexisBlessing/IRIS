@@ -148,13 +148,53 @@ h2 {
 
 .producto-card {
     display: flex;
-    flex-direction: column;     /* Apila imagen, título y precio verticalmente */
-    align-items: center;        /* Centra horizontalmente */
+    flex-direction: column; /* Apila imagen, título y precio verticalmente */
+    align-items: center; /* Centra horizontalmente */
     width: 100%;
     text-align: center;
     transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
     /*border: 1px solid black;*/
     /*background-color: none;*/
+    position: relative; /*Necesario efecto de ondas ripple*/
+    overflow: hidden;   /*Necesario efecto de ondas ripple*/
+}
+
+
+/*Efecto ondas ripple cursor*/
+/* El elemento que creará la onda (invisible por defecto) */
+.producto-card::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left:7px;
+    pointer-events: none;                                           /* Importante para que los clics lleguen a la imagen subyacente */
+    background-image: radial-gradient(circle, rgb(241, 185, 2) 15%, transparent 0%);
+    background-repeat: no-repeat;
+    background-position: center;                                    /* Inicia la onda en el centro */
+    transform: scale(0);
+    opacity: 1;
+    transition: transform 0s, opacity 0s;                           /* Transición por defecto sin animación */
+}
+
+/* Cuando el mouse entra en la tarjeta (.producto-card:hover), activa la animación */
+.producto-card:hover::after {
+    /* Reinicia la animación en bucle */
+    transform: scale(4); 
+    opacity: 0;
+    animation: pulse-ripple 1.25s infinite ease-out;
+}
+
+/* Definición de la animación en bucle */
+@keyframes pulse-ripple {
+    0% {
+        transform: scale(0);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2.5);  /* Agrandar o achicar la onda */
+        opacity: 0;
+    }
 }
 
 .catalogo-grid {
@@ -182,16 +222,17 @@ h2 {
 }
 
 .producto-card img:hover {
-    cursor: pointer;                            /* puntero al pasar mouse */
-    /*animation: pulseCursor 0.4s ease;*/
+    cursor: pointer;                          /* puntero al pasar mouse */
+    animation: pulseCursor 0.4s ease;
 }
-/*
+
+
 @keyframes pulseCursor {
     0%   { transform: scale(1); }
     50%  { transform: scale(1.06); }
     100% { transform: scale(1); }
 }
-*/
+
 
 .producto-card img[src*="placeholder.webp"] {
     aspect-ratio: 2 / 3;                        /* la proporción de las portadas reales */
@@ -422,6 +463,13 @@ footer {
         max-width: none;
         /*margin: 0;*/                                  /* centra la tarjeta si sobra espacio */
     }
+
+    .producto-card::after {
+
+        left:15px;
+
+    }
+
     .producto-card h3 {
         font-size: 1.5rem;
         /*border: 1px solid black;*/

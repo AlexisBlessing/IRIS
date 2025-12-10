@@ -236,7 +236,7 @@ if (isDesktop) {
         isWheelScrolling = true;
         isButtonScrolling = false;
 
-        targetScroll += e.deltaY * 0.6;
+        targetScroll += e.deltaY * 0.7;
 
         const maxScroll =
             document.documentElement.scrollHeight - window.innerHeight;
@@ -348,7 +348,7 @@ document.addEventListener("dragstart", (e) => {
     }
 });
 
-// --- Mostrar version segun fecha y hora de subida
+// --- Mostrar version segun fecha y hora de subida ---
 
 const badge = document.getElementById("versionBadge");
 
