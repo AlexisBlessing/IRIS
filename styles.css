@@ -223,16 +223,16 @@ h2 {
 
 .producto-card img:hover {
     cursor: pointer;                          /* puntero al pasar mouse */
-    /*animation: pulseCursor 0.4s ease;*/
+    animation: pulseCursor 0.4s ease;
 }
 
-    /*
+
 @keyframes pulseCursor {
     0%   { transform: scale(1); }
     50%  { transform: scale(1.06); }
     100% { transform: scale(1); }
 }
-*/
+
 
 .producto-card img[src*="placeholder.webp"] {
     aspect-ratio: 2 / 3;                        /* la proporción de las portadas reales */
