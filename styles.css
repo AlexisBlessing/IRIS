@@ -155,7 +155,8 @@ h2 {
     transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
     /*border: 1px solid black;*/
     /*background-color: none;*/
-
+    position: relative; /*Necesario efecto de ondas ripple*/
+    overflow: hidden;   /*Necesario efecto de ondas ripple*/
 }
 
 
@@ -222,16 +223,16 @@ h2 {
 
 .producto-card img:hover {
     cursor: pointer;                          /* puntero al pasar mouse */
-    animation: pulseCursor 0.4s ease;
+    /*animation: pulseCursor 0.4s ease;*/
 }
 
-
+    /*
 @keyframes pulseCursor {
     0%   { transform: scale(1); }
     50%  { transform: scale(1.06); }
     100% { transform: scale(1); }
 }
-
+*/
 
 .producto-card img[src*="placeholder.webp"] {
     aspect-ratio: 2 / 3;                        /* la proporción de las portadas reales */
